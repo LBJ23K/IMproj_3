@@ -9,7 +9,10 @@
                 "<feature name=\"Notification\"><param name=\"android-package\" value=\"org.apache.cordova.dialogs.Notification\" /></feature>": 1,
                 "<feature name=\"Vibration\"><param name=\"android-package\" value=\"org.apache.cordova.vibration.Vibration\" /></feature>": 1,
                 "<feature name=\"File\"><param name=\"android-package\" value=\"org.apache.cordova.file.FileUtils\" /><param name=\"onload\" value=\"true\" /></feature>": 1,
-                "<feature name=\"PushPlugin\"><param name=\"android-package\" value=\"com.plugin.gcm.PushPlugin\" /></feature>": 1
+                "<feature name=\"PushPlugin\"><param name=\"android-package\" value=\"com.plugin.gcm.PushPlugin\" /></feature>": 1,
+                "<feature name=\"Device\"><param name=\"android-package\" value=\"org.apache.cordova.device.Device\" /></feature>": 1,
+                "<feature name=\"LocalNotification\"><param name=\"android-package\" value=\"de.appplant.cordova.plugin.localnotification.LocalNotification\" /></feature>": 1,
+                "<feature name=\"Camera\"><param name=\"android-package\" value=\"org.apache.cordova.camera.CameraLauncher\" /></feature>": 1
             }
         },
         "AndroidManifest.xml": {
@@ -20,16 +23,23 @@
                 "<uses-permission android:name=\"android.permission.WAKE_LOCK\" />": 1,
                 "<uses-permission android:name=\"com.google.android.c2dm.permission.RECEIVE\" />": 1,
                 "<permission android:name=\"ntu.edu.tw.permission.C2D_MESSAGE\" android:protectionLevel=\"signature\" />": 1,
-                "<uses-permission android:name=\"ntu.edu.tw.permission.C2D_MESSAGE\" />": 1
+                "<uses-permission android:name=\"ntu.edu.tw.permission.C2D_MESSAGE\" />": 1,
+                "<uses-permission android:name=\"android.permission.RECEIVE_BOOT_COMPLETED\" />": 1
             },
             "/*": {
-                "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />": 1
+                "<uses-permission android:name=\"android.permission.WRITE_EXTERNAL_STORAGE\" />": 2
             },
             "/manifest/application": {
                 "<activity android:name=\"com.plugin.gcm.PushHandlerActivity\" />": 1,
                 "<receiver android:name=\"com.plugin.gcm.CordovaGCMBroadcastReceiver\" android:permission=\"com.google.android.c2dm.permission.SEND\"><intent-filter><action android:name=\"com.google.android.c2dm.intent.RECEIVE\" /><action android:name=\"com.google.android.c2dm.intent.REGISTRATION\" /><category android:name=\"ntu.edu.tw\" /></intent-filter></receiver>": 1,
-                "<service android:name=\"com.plugin.gcm.GCMIntentService\" />": 1
+                "<service android:name=\"com.plugin.gcm.GCMIntentService\" />": 1,
+                "<receiver android:name=\"de.appplant.cordova.plugin.localnotification.Receiver\" />": 1,
+                "<receiver android:name=\"de.appplant.cordova.plugin.localnotification.Restore\"><intent-filter><action android:name=\"android.intent.action.BOOT_COMPLETED\" /></intent-filter></receiver>": 1,
+                "<activity android:launchMode=\"singleInstance\" android:name=\"de.appplant.cordova.plugin.localnotification.ReceiverActivity\" />": 1
             }
+        },
+        "config.xml": {
+            "/*": {}
         }
     },
     "installed_plugins": {
@@ -44,7 +54,17 @@
         },
         "com.phonegap.plugins.PushPlugin": {
             "PACKAGE_NAME": "ntu.edu.tw"
+        },
+        "de.appplant.cordova.plugin.local-notification": {
+            "PACKAGE_NAME": "ntu.edu.tw"
+        },
+        "org.apache.cordova.camera": {
+            "PACKAGE_NAME": "ntu.edu.tw"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "org.apache.cordova.device": {
+            "PACKAGE_NAME": "ntu.edu.tw"
+        }
+    }
 }

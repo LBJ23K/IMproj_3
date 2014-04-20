@@ -11,6 +11,7 @@
     <script src="js/lib/json2.js"></script>
     <script src="js/lib/json_parse.js"></script>
     <script src="js/alert.js"></script>
+    <script src="js/eatdrink.js"></script>
 
     <script type="text/javascript" charset="utf-8" src="js/lib/PushNotification.js"></script>
     <script src="js/amcharts/amcharts.js" type="text/javascript"></script>
@@ -19,6 +20,8 @@
     <!-- Kendo UI Mobile combined JavaScript -->
     <script src="js/lib/Kendo_js/kendo.mobile.min.js"></script>
     <script type="text/javascript" charset="utf-8" src="cordova.js"></script>
+
+
 <script>
     var app= new kendo.mobile.Application($(document.body), {
          platform: "ios7"
@@ -56,9 +59,7 @@
             counter = counter+1;
 
             window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFSforWrite, fail);
-            
 
-            // $('#recordList').html("123klwadlajsldjalj");
         });
         $('#bloodSugar .reset').click(function(){
             // window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFSforRead, fail);
@@ -71,13 +72,14 @@
     function onBodyLoad(){
         // window.plugin.backgroundMode.enable();
         document.addEventListener("deviceready", onDeviceReady, false);
+        
     }
 
     // device APIs are available
     function onDeviceReady() {
         // window.plugin.backgroundMode.enable();
         // alert("ready");
-        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFSforInit, fail);
+        window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFSforInit, failInit);
     }
 
     function gotFSforWrite(fileSystem) {
@@ -93,7 +95,7 @@
             alert("write OK");
             chartData2.push(bloodsugarRecord);
             var last = chartData2.length;
-            alert(last);
+            // alert(last);
 
             chart.dataProvider = chartData2;
             chart.validateData();
@@ -103,8 +105,11 @@
         writer.write( ','+ JSON.stringify(bloodsugarRecord) );
 
     }
-
+    function failInit(error){
+        alert("init fail");
+    }
     function fail(error) {
+        console.log(error.code);
         alert(error.code);
     }
     function gotFSforInit(fileSystem) {
@@ -186,6 +191,7 @@
             // LEGEND
             var legend = new AmCharts.AmLegend();
             chart.addLegend(legend);
+            // alert("chartok");
             // chart.write("chartdiv");
             // WRITE
        
@@ -240,10 +246,10 @@
         
     }
     
-     window.swipeTorecordHome = {
+     window.swipeBack = {
         swipe: function(e) {
             if(e.direction =="right") {
-                app.navigate('#recordHome','slide:right');
+                app.navigate('#:back','slide:right');
             }
         }
     }
@@ -276,17 +282,23 @@
     padding: 0px;
     display: block;
 }
-.yo{
+.circle-change{
     position: absolute;
     left: 50%;
+    font-size: 10px;
     bottom: 0;
-    margin-left: -13px;
+    margin-left: -12px;
+}
+.circle-change i{
+    margin: 2px;
 }
 #swipe_history{
     width: 100%;
     height: 100%;
 }
-
+#eatDrink .eatform input{
+    margin: 8px;
+}
 </style>
 </head>
 <body onload="onBodyLoad()" >
@@ -296,7 +308,6 @@
         <div data-role="navbar">
             <a class="nav-backbtn"  data-align="left" data-role="backbutton">返回</a>
             <span data-role="view-title"></span>
-            <!-- <a data-align="right" data-role="button" class="nav-button" href="#/">Index</a> -->
         </div>
     </header>
     <footer data-role="footer">
@@ -316,51 +327,52 @@
     <div data-role="view" data-layout="app" id="home" data-title="首頁">
    <div id="swipe_history" style="border:1px solid blue;">
         <ul data-role="listview" data-style="inset" style="background:#ff5f5f;">
-            <li class="bloodsugarList" style="color:black;font-weight:bold;"><i class="fa fa-times"></i>血糖</li>
-            
+            <li class="bloodsugarList" style="color:black;font-weight:bold;"><i class="fa fa-times"></i>血糖</li>        
         </ul>
-        </div>
+    </div>
         
     </div>
 
     <div data-role="view" data-layout="app" id="recordHome" data-title="記錄" data-transition="slide">
         <div data-role="touch" data-enable-swipe="1" data-swipe="swipeTohistory.swipe" style="width:100%;height:100%;">
             <a href="#bloodSugar" data-role="button" class="large_btn">血糖</a>
-            <a href="#"  data-role="button"  class="large_btn">飲食</a>
+            <a data-role="button"  class="large_btn drink">飲食</a>
             <a href="#alertHome" data-role="button" class="large_btn">提醒</a>
-            <div class="yo"><i class="fa fa-circle"></i><a href="#history"><i class="fa fa-circle-o"></i></a></div>
+            <div class="circle-change"><i class="fa fa-circle"></i><a href="#history"><i class="fa fa-circle-o"></i></a></div>
         </div>
     </div>
 
 
     <div data-role="view" data-layout="app" id="bloodSugar" data-title="血糖記錄" 
     data-transition="slide" >
-        <span>血糖值：</span><input class="bloodSugar_input" type="text" placeholder="mg/dl">
-            <table  class="table table-bordered" >
-                <tr>
-                    <td>早餐前</td>
-                    <td>午餐前</td>
-                    <td>晚餐前</td>
-                    <td>點心前</td>
-                </tr>
-                <tr>
-                    <td>早餐後</td>
-                    <td>午餐後</td>
-                    <td>晚餐後</td>
-                    <td>點心後</td>
-                </tr>
-            </table>
+        <div data-role="touch" data-enable-swipe="1" data-swipe="swipeBack.swipe" style="width:100%;height:100%;">
+            <span>血糖值：</span><input class="bloodSugar_input" type="text" placeholder="mg/dl">
+                <table  class="table table-bordered" >
+                    <tr>
+                        <td>早餐前</td>
+                        <td>午餐前</td>
+                        <td>晚餐前</td>
+                        <td>點心前</td>
+                    </tr>
+                    <tr>
+                        <td>早餐後</td>
+                        <td>午餐後</td>
+                        <td>晚餐後</td>
+                        <td>點心後</td>
+                    </tr>
+                </table>
 
-        <span>備註：</span><br>
-        <textarea  class="form-control"rows="3"></textarea>
-            <button data-role="button" class="submit">完成</button>
-            <button data-role="button" class="reset" >清除</button>
+            <span>備註：</span><br>
+            <textarea  class="form-control"rows="3"></textarea>
+                <button data-role="button" class="submit">完成</button>
+                <button data-role="button" class="reset" >清除</button>
+        </div>
     </div>
     <div data-role="view" data-layout="app" id="history" data-title="記錄歷史" data-transition="slide" >
-        <div data-role="touch" data-enable-swipe="1" data-swipe="swipeTorecordHome.swipe" style="width:100%;height:100%;">
+        <div data-role="touch" data-enable-swipe="1" data-swipe="swipeBack.swipe" style="width:100%;height:100%;">
             <div id="recordList">fsal</div>
             <div id="printDiv">aabbcc</div>
-            <div class="yo"><a href="#recordHome"><i class="fa fa-circle-o"></i></a><i class="fa fa-circle"></i></div>
+            <div class="circle-change"><a href="#recordHome"><i class="fa fa-circle-o"></i></a><i class="fa fa-circle"></i></div>
         </div>
         
     </div>
@@ -404,6 +416,33 @@
          <a data-role="button" class="submit">確定</a>
          <a data-role="button" href="#:back" >取消</a>
     </div>
+
+    <div data-role="view" data-layout="app" id="eatDrink" data-title="飲食記錄" 
+    data-transition="slide" >
+        <div data-role="touch" data-enable-swipe="1" data-swipe="swipeBack.swipe" style="width:100%;height:100%;">
+            <p align="center"><img style="display:none;width:50%;height:50%; border:1px solid blue; " class="imageShow" src="" /></p>
+            <br>
+
+            <h3>這餐我吃了什麼</h3>
+            <form class="eatForm">
+                <input type="checkbox" name="check1">五榖根莖<br>
+                <input type="checkbox" name="check2">蛋豆魚肉<br>
+                <input type="checkbox" name="check3">蔬菜<br>
+                <input type="checkbox" name="check4">水果<br>
+                <input type="checkbox" name="check5">奶類<br>
+                <input type="checkbox" name="check6">油脂類<br>
+            </form>
+                <a data-role="button" class="addnewItem">新增選項</a> 
+            <div id='checkbox_here'></div>
+            <br><br>
+
+            <h4>備註</h4>
+            <textarea id="extra" cols = "35" rows="5"></textarea><br/><br/>
+            <a data-role="button" class="submit">確定</a> 
+            <a data-role="button" class="reset">清除</a> 
+        </div>
+    </div>
+
 
   </body>
 </html>

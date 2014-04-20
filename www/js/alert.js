@@ -5,11 +5,20 @@ $(document).ready(function(){
          window.requestFileSystem(LocalFileSystem.PERSISTENT, 0, gotFS, fail); 
         })
    $('#alertHome .submit').click(function(){
-    alert("yo");
+    // alert("yo");
          var switchInstance = $(".bsNoti").data("kendoMobileSwitch");
          console.log(switchInstance);
                 if( switchInstance.check() === true )
                 {
+                  var yo  = new Date();
+                  var year = new Date().getFullYear();
+   var month = yo.getMonth()+1;
+   var day = yo.getDate();
+
+console.log(yo);
+   console.log(year);
+   console.log(month);
+   console.log(day);
                     addNoti();
                 }
    });
@@ -36,11 +45,13 @@ function gotFileWriter2(writer)
    var month = new Date().getMonth();
    var day = new Date().getDay();
 
+   console.log(year);
+   console.log(month);
+   console.log(day);
    // first time --> [{json data}]
    if( writer.length === 0 )
    {
       var data = [{"name":medName,"year":year,"month":month,"day":day,"time":medTime}];
-
       writer.write(data);
    }
 
@@ -48,7 +59,7 @@ function gotFileWriter2(writer)
    else
    {
       var data = {"name":medName,"year":year,"month":month,"day":day,"time":medTime};
-
+      alert(data.name);
       // write json data
       writer.onwriteend = function(evt) {
          writer.seek(writer.length);
@@ -74,7 +85,7 @@ function gotFileWriter2(writer)
 
 function addNoti() 
 {
-   alert("addNOti");
+   // alert("addNOti");
     var d = new Date();
     var now = new Date().getTime();
     var _10_seconds_from_now = new Date(now + 10*1000);
@@ -110,7 +121,7 @@ function alertDismissed()
 
 // Show a custom alertDismissed
 function showAlert() {
-   alert("show");
+   // alert("show");
     navigator.notification.alert(
         '該量血糖囉!',    // message
         alertDismissed,   // callback
